@@ -1,3 +1,37 @@
+-- Queries for TABLEAU Visualization
+-- 1) Display the global data of the total cases and total deaths, with the calculated death percentage
+SELECT SUM(new_cases) as TotalCases, SUM(new_deaths) as TotalDeaths, SUM(cast(new_deaths as float))/sum(cast(new_cases as float))*100 as DeathPercentage
+From PortfolioProject..CovidDeaths
+WHERE continent is not null
+-- GROUP BY date
+ORDER BY 1,2;
+
+--2) The total death count per continents
+SELECT continent, sum(new_deaths) as TotalDeathCount
+FROM PortfolioProject..CovidDeaths
+WHERE continent is not null
+GROUP BY continent
+ORDER BY TotalDeathCount DESC
+
+--3) the percentage of the population infected per country
+SELECT Location, Population, Max(total_cases) as HighestInfectionCount, Max((total_cases/Population))*100 
+	as PercentPopnInfected
+From PortfolioProject..CovidDeaths
+GROUP BY Location, Population
+ORDER BY PercentPopnInfected DESC;
+
+--4) the percentage of the population infected per country as a time series data
+SELECT Location, Population, date, Max(total_cases) as HighestInfectionCount, Max((total_cases/Population))*100 
+	as PercentPopnInfected
+From PortfolioProject..CovidDeaths
+GROUP BY Location, Population, date
+ORDER BY PercentPopnInfected DESC;
+
+
+
+
+
+-- Queries for Data Exploration
 SELECT * From PortfolioProject..CovidDeaths
 WHERE continent IS NOT NULL
 ORDER BY 3,4;
